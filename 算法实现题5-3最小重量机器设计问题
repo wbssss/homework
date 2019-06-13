@@ -1,0 +1,72 @@
+#include<stdio.h>
+#define max 100
+ 
+int cost[max][max],weight[max][max];
+int n,m,d;
+int current_weight,current_cost;
+int best_cost,best_weight;
+int array[max],best_array[max];
+ 
+void print()
+{
+	printf("%d---%d\n",best_weight,best_cost);
+	for(int i=1;i<=n;i++)
+		printf("%d ",best_array[i]);
+	printf("\n");
+}
+ 
+void BackTrack(int level)
+{
+	if(current_cost>d)
+		return;
+	if(level == n+1)
+	{
+		if(current_cost<=d&¤t_weight<best_weight)
+		{
+			best_cost = current_cost;
+			best_weight = current_weight;
+			for(int i=1;i<=n;i++)
+				best_array[i] = array[i];
+		}
+	}
+	else 
+	{
+		int i,j,k,l;
+		for(i=1;i<=m;i++)
+		{
+			current_weight = current_weight+weight[level][i];
+			current_cost = current_cost+cost[level][i];
+			array[level] = i;
+			BackTrack(level+1);
+			current_weight = current_weight-weight[level][i];
+			current_cost = current_cost-cost[level][i];
+		}
+	}
+}
+ 
+ 
+int main()
+{
+	int i,j,k,l;
+	while(scanf("%d%d%d",&n,&m,&d)!=EOF)
+	{
+		for(i=1;i<=n;i++)
+		{
+			for(j=1;j<=m;j++)
+				scanf("%d",&cost[i][j]);
+		}
+		for(i=1;i<=n;i++)
+		{
+			for(j=1;j<=m;j++)
+				scanf("%d",&weight[i][j]);
+		}
+		
+		best_weight = 99999;//max_value;
+		
+		BackTrack(1);
+		
+		print();
+		
+	}
+	return 0;
+}
