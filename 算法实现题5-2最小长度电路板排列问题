@@ -1,0 +1,84 @@
+#include<stdio.h>
+#define n 8
+#define m 5
+int arr[n][m]={
+	{1,1,1,1,1},
+	{0,1,0,1,0},
+	{0,1,1,1,0},
+	{1,0,1,1,0},
+	{1,0,1,0,0},
+	{1,1,0,1,0},
+	{0,0,0,0,1},
+	{0,1,0,0,1}
+};
+int a[n],opt[n];
+int mincount=99999;
+int tempcount;
+void traceback(int t)
+{
+	int i,j;
+	int left,right;
+	int temp;
+	
+	if(t==n)
+	{
+		tempcount=0;
+		for(i=0;i<m;i++)
+		{
+			for(j=0;j<n;j++)      //最左边的 
+			{
+				if(arr[a[j]][i]==1)
+				{
+					left=j;
+					break;
+				}
+			}
+			
+			for(j=n-1;j>=0;j--)   //最右边的 
+			{
+				if(arr[a[j]][i]==1)
+				{
+					right=j;
+					break;
+				}
+			}
+			if(tempcount<right-left)    //最大长度 
+			{
+				tempcount=right-left;
+			}
+		}
+		if(tempcount<mincount)    //最大长度的最小值 
+		{
+			mincount=tempcount;
+			for(i=0;i<n;i++)
+				opt[i]=a[i];
+		}
+		return;
+	}
+	
+	for(i=t;i<n;i++)
+	{
+		temp=a[i];
+		a[i]=a[t];
+		a[t]=temp;
+		traceback(t+1);
+		temp=a[i];
+		a[i]=a[t];
+		a[t]=temp;
+	}
+}
+int main()
+{
+	int i;
+	for(i=0;i<n;i++)
+		a[i]=i;
+	
+	traceback(0);
+	
+	printf("%d\n",mincount);
+	
+	for(i=0;i<n;i++)
+		printf("%d   ",opt[i]+1);
+	printf("\n");	
+	return 0;
+}
