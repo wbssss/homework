@@ -1,0 +1,67 @@
+#include<iostream>
+using namespace std;
+#define  M 50 //最大活动数
+struct Active
+{
+int s;//开始时间
+int e;//结束时间
+int no;//预安排会场号
+}a[M];
+//两元素交换位置
+void swap(Active &a,Active &b)
+{
+Active t;
+t=a;
+a=b;
+b=t;
+}
+void main()
+{
+int k;
+int i,j;
+cout<<"输入待安排活动数:"<<endl;
+cin>>k;
+cout<<"输入待安排活动的开始时间和结束时间:"<<endl;
+//输入活动时间
+for(i=1;i<=k;i++)
+{
+cin>>a[i].s>>a[i].e;
+a[i].no=0;
+}
+//活动时间排序
+for(i=1;i<=k;i++)
+{
+for(j=i;j<=k;j++)
+{
+if(a[i].s>a[j].s)
+swap(a[i],a[j]);
+if(a[i].s==a[j].s)
+{
+if(a[i].e>a[j].e)
+swap(a[i],a[j]);
+}
+}
+}
+int sum=1;//使用的会场数初始化
+int n;
+a[1].no=sum;
+for(i=2;i<=k;i++)
+{
+for(n=1;n<i;n++)
+{
+if(a[n].no!=0&&a[n].e<=a[i].s)
+{
+a[i].no=a[n].no;
+a[n].no=0;//已经安排过的活动就不再比较
+break;
+}
+}
+if(n==i)
+{
+sum+=1;
+a[i].no=sum;
+}
+}
+cout<<"输出最少会场数:\n"<<sum<<endl;
+system("pause");
+}
